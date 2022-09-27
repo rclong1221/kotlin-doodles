@@ -1,6 +1,5 @@
 package com.example.movieapp.screens
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -8,11 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.movieapp.MovieRow
+import com.example.movieapp.models.Movie
+import com.example.movieapp.models.getMovies
 import com.example.movieapp.navigation.MovieScreens
+import com.example.movieapp.widgets.MovieRow
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val movies = getMovies()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -23,33 +25,12 @@ fun HomeScreen(navController: NavController) {
             }
         },
     ) {
-        MainContent(navController = navController)
+        MainContent(navController = navController, movies = movies)
     }
 }
 
 @Composable
-fun MainContent(navController: NavController, movies: List<String> = listOf(
-    "Avatar",
-    "300",
-    "Larry Botter",
-    "Life",
-    "Avatar2",
-    "3002",
-    "Larry Botter2",
-    "Life2",
-    "Avatar3",
-    "3003",
-    "Larry Botter3",
-    "Life3",
-    "Avatar4",
-    "3004",
-    "Larry Botter4",
-    "Life4",
-    "Avatar5",
-    "3005",
-    "Larry Botter5",
-    "Life5"
-)) {
+fun MainContent(navController: NavController, movies: List<Movie>) {
     Surface(color = MaterialTheme.colors.background) {
         LazyColumn {
             items(items = movies) {
