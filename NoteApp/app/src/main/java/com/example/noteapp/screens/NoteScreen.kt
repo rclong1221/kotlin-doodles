@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.*
@@ -20,9 +22,14 @@ import androidx.compose.ui.unit.dp
 import com.example.noteapp.R
 import com.example.noteapp.components.NoteButton
 import com.example.noteapp.components.NoteInputText
+import com.example.noteapp.model.Note
 
 @Composable
-fun NoteScreen() {
+fun NoteScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
+) {
     var title by remember {
         mutableStateOf("")
     }
@@ -48,7 +55,10 @@ fun NoteScreen() {
             backgroundColor = Color(0xFFDADFE3)
         )
 
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             NoteInputText(
                 text = title,
                 label = "Title",
@@ -58,12 +68,24 @@ fun NoteScreen() {
             )
             NoteInputText(
                 text = description,
-                label = "Title",
+                label = "Note",
                 onTextChange = {
                     if (it.all { char -> char.isLetter() || char.isWhitespace() }) description = it
                 }
             )
-            NoteButton(text = "Save", onClick = { if (title.isNotEmpty()&& description.isNotEmpty()) Log.d("MSG","Saved ${title}") })
+            NoteButton(
+                text = "Save",
+                onClick = {
+                    if (title.isNotEmpty() && description.isNotEmpty())
+                        Log.d("MSG","Saved ${title}")
+                }
+            )
+        }
+        Divider(modifier = Modifier.padding(10.dp))
+        LazyColumn {
+            items(notes) {
+                note -> Text(text = note.title)
+            }
         }
     }
 }
@@ -71,5 +93,5 @@ fun NoteScreen() {
 @Preview(showBackground = true)
 @Composable
 fun NoteScreenPreview() {
-    NoteScreen()
+    NoteScreen(notes = emptyList(), onAddNote = {}, onRemoveNote = {})
 }
