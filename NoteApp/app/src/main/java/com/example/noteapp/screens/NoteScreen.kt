@@ -91,7 +91,12 @@ fun NoteScreen(
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn {
             items(notes) {
-                note -> NoteRow(note = note, onNoteClicked = {})
+                note -> NoteRow(
+                    note = note,
+                    onNoteClicked = {
+                        onRemoveNote(note)
+                        Toast.makeText(context, "Note deleted", Toast.LENGTH_SHORT).show()
+                    })
             }
         }
     }
@@ -112,7 +117,7 @@ fun NoteRow(
         elevation = 6.dp
     ) {
         Column(
-            modifier.clickable {  }
+            modifier.clickable { onNoteClicked(note) }
                 .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.Start
         ) {
